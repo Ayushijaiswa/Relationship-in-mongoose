@@ -50,17 +50,19 @@ const customerSchema=new Schema({
         }
     ]
 })
-customerSchema.pre("findOneAndDelete",async()=>{
-    console.log("pre")
-})
-customerSchema.post("findOneAndDelete",async(data)=>{
-   if(data.orders.length){
-  await  Order.deleteMany({_id:{$in:Customer.orders }})
+//customerSchema.pre("findOneAndDelete",async()=>{
+  //  console.log("pre")
+//})
+customerSchema.post("findOneAndDelete",async(customer)=>{
+   if(customer.orders.length){
+    let data1= await  Order.deleteMany({_id:{$in:customer.orders }})
+  console.log(data1)
    }
 })
 const Customer=mongoose.model("Customer",customerSchema);
 const addCustomer=async()=>{
- let cust1=new Customer({
+
+    let cust1=new Customer({
     name:"khushi jaiswal",
 
  })
@@ -91,8 +93,11 @@ const addCust=async()=>{
     await newCust.save();
     console.log("added")
 }
+
 const delCust=async()=>{
     //onlu delte the customer
-    let data=await Customer.findByIdAndDelete("66a508c51a952e69462b6610");
+    let data=await Customer.findByIdAndDelete("66a53e589ec916b382e320ed");
+    console.log(data)
 }
 delCust()
+
